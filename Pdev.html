@@ -6,6 +6,9 @@
     <title>Profile Card ᕙ(͡°‿ ͡°)ᕗ</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
     <style>
         :root {
             /* --- Light Theme --- */
@@ -273,14 +276,8 @@
         }
 
         @keyframes ripple-effect {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1.1);
-                opacity: 0;
-            }
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0; }
         }
 
         .infinity-container { position: absolute; top: 25px; left: 25px; width: 80px; height: 40px; z-index: 3; }
@@ -497,6 +494,36 @@
             transition: background-color 0.2s ease, transform 0.2s ease;
         }
         .popup-button:hover { transform: scale(1.03); text-decoration: none !important; }
+
+        #ip-logger { display: none; }
+
+        /* Custom CSS for consent popup: smaller size, rounded edges, centered bottom */
+        .cc-window {
+            border-radius: 15px !important;
+            width: 280px !important;
+            font-size: 12px !important;
+            padding: 10px !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+            bottom: 20px !important;
+            z-index: 10000 !important;
+        }
+        .cc-message {
+            font-size: 12px !important;
+            margin-bottom: 8px !important;
+        }
+        .cc-compliance .cc-btn {
+            border-radius: 8px !important;
+            padding: 6px 12px !important;
+            font-size: 12px !important;
+        }
+        .cc-btn.cc-deny {
+            margin-left: 5px !important;
+        }
+        .cc-link {
+            font-size: 11px !important;
+        }
     </style>
 </head>
 <body>
@@ -583,9 +610,9 @@
                     <div class="card-back-content">
                         <div id="flip-card-back-icon" class="info-icon flip-icon" aria-label="Flip Card">🔄</div>
                         <h1><b>SCAN TO SHARE</b></h1>
-                        <img src="https://i.ibb.co/tpyqRqbL/batqr-qrcode.png" alt="QR Code" class="qr-code">
+                        <img src="https://i.ibb.co/Ps5DShrd/Untitled.png" alt="QR Code" class="qr-code">
                         <div class="link-container">
-                            <div id="page-link-box">https://norwell-official-profile-dev.github.io/XyZtUvWxYzAbCdEfGhIjKlMnOpQrSt/DEV.html</div>
+                            <div id="page-link-box">https://norwell-official-profile-dev.github.io/PROFILE-CARD-Go-beyond-the-limit/Pdev.html</div>
                             <button id="copy-link-button" aria-label="Copy Page Link">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
                             </button>
@@ -618,21 +645,113 @@
         </div>
     </div>
     
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+    <!-- Hidden IP Logger -->
+    <img id="ip-logger" src="" style="display: none;" alt="">
+
     <script>
         $(document).ready(function() {
+            // --- CHECK IF CONSENT NEEDS TO BE RE-PROMPTED (every 24 hours for granted) ---
+            const consentKey = 'analytics_consent';
+            const timeKey = 'last_consent_time';
+            const consentInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            const currentTime = Date.now();
+            const lastTime = parseInt(localStorage.getItem(timeKey)) || 0;
+
+            // Reset consent if more than 24 hours has passed for granted consent
+            if (localStorage.getItem(consentKey) === 'granted' && (currentTime - lastTime) > consentInterval) {
+                localStorage.removeItem(consentKey);
+                localStorage.removeItem(timeKey);
+                document.cookie = "cookieconsent_status=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+
+            // --- COOKIE CONSENT POPUP ---
+            let consentPopup;
+            consentPopup = window.cookieconsent.initialise({
+                "palette": {
+                    "popup": { "background": "var(--popup-bg)", "text": "var(--popup-text)" },
+                    "button": { "background": "var(--text-accent)" }
+                },
+                "position": "bottom", // Centered bottom
+                "type": "opt-in", // Explicit consent required
+                "content": {
+                    "message": "This site collects your IP address and uses cookies for analytics to improve your experience. You can opt out at any time.",
+                    "allow": "Agree",
+                    "deny": "Decline",
+                    "link": "Privacy Policy",
+                    "href": "/privacy-policy.html"
+                },
+                onInitialise: function(status) {
+                    if (status === 'allow') {
+                        localStorage.setItem(consentKey, 'granted');
+                        localStorage.setItem(timeKey, Date.now().toString());
+                        enableIPLogging();
+                        hideConsentPopup();
+                    } else if (status === 'deny') {
+                        // For decline, do not store consent, so popup shows on next load
+                        localStorage.removeItem(consentKey);
+                        localStorage.removeItem(timeKey);
+                        $('#ip-logger').attr('src', '');
+                        hideConsentPopup();
+                    }
+                },
+                onStatusChange: function(status) {
+                    if (status === 'allow') {
+                        localStorage.setItem(consentKey, 'granted');
+                        localStorage.setItem(timeKey, Date.now().toString());
+                        enableIPLogging();
+                        hideConsentPopup();
+                    } else if (status === 'deny') {
+                        // For decline, do not store consent
+                        localStorage.removeItem(consentKey);
+                        localStorage.removeItem(timeKey);
+                        $('#ip-logger').attr('src', '');
+                        hideConsentPopup();
+                    }
+                },
+                onPopupOpen: function() {
+                    $('.cc-window').css({
+                        'display': 'block',
+                        'opacity': '1',
+                        'z-index': '10000'
+                    });
+                }
+            });
+
+            // --- FUNCTION TO HIDE CONSENT POPUP ---
+            function hideConsentPopup() {
+                $('.cc-window').fadeOut(300, function() {
+                    $(this).remove(); // Remove from DOM to prevent reappearance
+                });
+            }
+
+            // --- IP LOGGING FUNCTION ---
+            function enableIPLogging() {
+                if (localStorage.getItem(consentKey) !== 'granted') return;
+                $('#ip-logger').attr('src', 'https://urlto.me/21YM2');
+            }
+
+            // Check consent on page load
+            if (localStorage.getItem(consentKey) === 'granted' && (currentTime - lastTime) <= consentInterval) {
+                enableIPLogging();
+                hideConsentPopup();
+            } else {
+                // Show popup if no valid consent
+                localStorage.removeItem(consentKey);
+                localStorage.removeItem(timeKey);
+                document.cookie = "cookieconsent_status=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            }
+
             // --- COVER PHOTO TIME-BASED LOGIC ---
             const coverPhoto = $('#cover-photo');
             const coverPhotos = {
-                morning: 'https://i.ibb.co/JjjSZz3g/92ecd75b-96e4-4f7d-a3f0-74e941024352.gif', // Replace with morning cover photo URL
-                afternoon: 'https://i.ibb.co/ZRd8hPr2/Windmill-GIF.gif', // Replace with afternoon cover photo URL
-                evening: 'https://i.ibb.co/wh9YvCRY/Stars-Night-GIF-Find-Share-on-GIPHY.gif' // Replace with evening cover photo URL
+                morning: 'https://i.ibb.co/JjjSZz3g/92ecd75b-96e4-4f7d-a3f0-74e941024352.gif',
+                afternoon: 'https://i.ibb.co/ZRd8hPr2/Windmill-GIF.gif',
+                evening: 'https://i.ibb.co/wh9YvCRY/Stars-Night-GIF-Find-Share-on-GIPHY.gif'
             };
 
             function updateCoverPhoto() {
                 const currentHour = new Date().getHours();
                 let timeOfDay;
-
                 if (currentHour >= 6 && currentHour < 12) {
                     timeOfDay = 'morning';
                 } else if (currentHour >= 12 && currentHour < 18) {
@@ -640,14 +759,9 @@
                 } else {
                     timeOfDay = 'evening';
                 }
-
                 coverPhoto.attr('src', coverPhotos[timeOfDay]);
             }
-
-            // Initialize cover photo on page load
             updateCoverPhoto();
-
-            // Update cover photo every minute to handle hour changes
             setInterval(updateCoverPhoto, 60000);
 
             // --- THEME LOGIC ---
@@ -663,7 +777,6 @@
                     const currentHour = new Date().getHours();
                     effectiveTheme = (currentHour >= 18 || currentHour < 6) ? 'dark' : 'light';
                 }
-
                 if (effectiveTheme === 'dark') {
                     $('body').addClass('dark-mode').removeClass('light-mode');
                     if (quoteFrame.attr('src') !== darkQuoteSrc) { quoteFrame.attr('src', darkQuoteSrc); }
@@ -671,7 +784,6 @@
                     $('body').removeClass('dark-mode').addClass('light-mode');
                     if (quoteFrame.attr('src') !== lightQuoteSrc) { quoteFrame.attr('src', lightQuoteSrc); }
                 }
-
                 if (mode === 'light') {
                     themeIcon.html('☀️');
                 } else if (mode === 'dark') {
@@ -686,9 +798,7 @@
                 let currentIndex = THEME_MODES.indexOf(currentMode);
                 let nextIndex = (currentIndex + 1) % THEME_MODES.length;
                 let newMode = THEME_MODES[nextIndex];
-                
                 localStorage.setItem('theme', newMode);
-                
                 applyTheme(newMode);
             });
 
@@ -717,7 +827,7 @@
                 }, 50);
             }
 
-            // --- UTILITIES (with UPDATED Unique ID logic) ---
+            // --- UTILITIES ---
             $.getJSON('https://api.ipify.org?format=json', (data) => $('#ip-address').text(data.ip)).fail(() => $('#ip-address').text('Unavailable'));
             
             let uniqueId = localStorage.getItem('uniqueId');
@@ -856,13 +966,10 @@
             $('.flip-icon').on('click', function() {
                 if (isCardFlipping) return;
                 isCardFlipping = true;
-
                 if (navigator.vibrate) {
                     navigator.vibrate(100);
                 }
-
                 $('#profile-card').toggleClass('is-flipped');
-                
                 setTimeout(() => {
                     isCardFlipping = false;
                 }, 1000);
@@ -874,7 +981,6 @@
                 const feedbackButton = $(this);
                 const originalIcon = feedbackButton.html();
                 universalCopy(linkToCopy);
-                
                 feedbackButton.html('✔️');
                 setTimeout(() => {
                     feedbackButton.html(originalIcon);
