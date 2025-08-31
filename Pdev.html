@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Card ᕙ(  • ‿ •  )ᕗ</title>
+    <title>Profile Card ∞ </title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
@@ -36,6 +36,7 @@
             --ripple-color: rgba(20, 147, 165, 0.7);
             --link-box-bg: #f0f0f0;
             --link-box-border: #e0e0e0;
+            --scan-text-bg: rgba(255, 255, 255, 0.1);
         }
 
         body.dark-mode {
@@ -63,6 +64,7 @@
             --ripple-color: rgba(51, 186, 204, 0.7);
             --link-box-bg: #2c2c2c;
             --link-box-border: #444;
+            --scan-text-bg: rgba(0, 0, 0, 0.2);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -158,9 +160,34 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             padding: 30px;
             position: relative;
+        }
+
+        .scan-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            padding: 5px 10px;
+            background: var(--scan-text-bg);
+            border-radius: 5px;
+            background-image: linear-gradient(135deg, #33bacc, #ff00f3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: all 0.5s ease;
+        }
+
+        .version-text {
+            font-size: 10px;
+            color: var(--text-secondary);
+            position: absolute;
+            bottom: -16px;
+            left: 10px;
+            margin: 0;
+            transition: color 0.5s ease;
         }
 
         #flip-card-back-icon {
@@ -176,6 +203,7 @@
             border: 5px solid var(--body-bg);
             background-color: white;
             padding: 5px;
+            position: relative;
         }
 
         .link-container {
@@ -280,9 +308,26 @@
             100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0; }
         }
 
-        .infinity-container { position: absolute; top: 25px; left: 25px; width: 80px; height: 40px; z-index: 3; }
-        .infinity-path { stroke: var(--infinity-stroke); stroke-width: 10; fill: none; stroke-linecap: round; stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke 1.5s ease; }
-        @keyframes draw { to { stroke-dashoffset: 0; } }
+        .infinity-container { 
+            position: absolute; 
+            top: 25px; 
+            left: 25px; 
+            width: 80px; 
+            height: 40px; 
+            z-index: 3; 
+        }
+        .infinity-path { 
+            stroke-width: 18;
+            fill: none; 
+            stroke-linecap: round; 
+            stroke-dasharray: 1000; 
+            stroke-dashoffset: 1000; 
+            stroke: url(#rgb-gradient);
+            animation: draw 5s linear forwards, rgb-metamorphosis 8s ease infinite; 
+        }
+        @keyframes draw { 
+            to { stroke-dashoffset: 0; } 
+        }
 
         .name {
             font-size: 24px;
@@ -291,16 +336,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #00e5ff, #ff00f3, #ffc400, #1bff00, #00e5ff);
+            background: linear-gradient(135deg, #00e5ff, #ff00f3, #00e5ff);
             background-size: 400% 400%;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            animation: mist-effect 65s ease infinite;
+            animation: mist-effect 100s ease infinite;
             transition: all 0.4s ease-in-out;
         }
-        .name:hover { animation-duration: 10s; }
-        @keyframes mist-effect { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .name:hover { animation-duration: 20s; }
+        @keyframes mist-effect { 
+            0% { background-position: 0% 50%; } 
+            50% { background-position: 100% 50%; } 
+            100% { background-position: 0% 50%; } 
+        }
 
         .verified-badge {
             width: 20px;
@@ -311,18 +360,60 @@
             top: -2px;
         }
 
-        .bio { font-family: 'Pacifico', cursive; font-size: 16px; color: var(--bio-color); margin-top: 10px; margin-bottom: 25px; min-height: 80px; position: relative; transition: color 0.5s ease; }
-        .bio::after { content: '|'; display: inline-block; margin-left: 3px; font-weight: 300; animation: blink 0.7s infinite; }
-        .bio.typing-done::after { display: none; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .bio { 
+            font-family: 'Pacifico', cursive; 
+            font-size: 16px; 
+            color: var(--bio-color); 
+            margin-top: 10px; 
+            margin-bottom: 25px; 
+            min-height: 80px; 
+            position: relative; 
+            transition: color 0.5s ease; 
+        }
+        .bio::after { 
+            content: '|'; 
+            display: inline-block; 
+            margin-left: 3px; 
+            font-weight: 300; 
+            animation: blink 0.7s infinite; 
+        }
+        .bio.typing-done::after { 
+            display: none; 
+        }
+        @keyframes blink { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0; } 
+        }
 
-        .social-icons { display: flex; justify-content: center; gap: 20px; }
-        .social-icon { width: 35px; height: 35px; transition: transform 0.3s, filter 0.5s ease; filter: var(--social-icon-filter); }
-        .social-icon:hover { transform: scale(1.1); }
-        .social-icon svg { width: 35px; height: 35px; }
+        .social-icons { 
+            display: flex; 
+            justify-content: center; 
+            gap: 20px; 
+        }
+        .social-icon { 
+            width: 35px; 
+            height: 35px; 
+            transition: transform 0.3s, filter 0.5s ease; 
+            filter: var(--social-icon-filter); 
+        }
+        .social-icon:hover { 
+            transform: scale(1.1); 
+        }
+        .social-icon svg { 
+            width: 35px; 
+            height: 35px; 
+        }
 
-        .info { margin-top: 25px; font-size: 12px; color: var(--text-accent); transition: color 0.5s ease; }
-        #ip-address { font-size: 14px; font-weight: 600; }
+        .info { 
+            margin-top: 25px; 
+            font-size: 12px; 
+            color: var(--text-accent); 
+            transition: color 0.5s ease; 
+        }
+        #ip-address { 
+            font-size: 14px; 
+            font-weight: 600; 
+        }
 
         .id-clock-container {
             display: flex;
@@ -369,14 +460,43 @@
         }
         #copy-feedback.visible { opacity: 1; }
 
-        .live-clock { font-size: 12px; font-weight: 600; color: var(--text-accent); background: rgba(0, 0, 0, 0.05); padding: 2px 8px; border-radius: 10px; }
+        .live-clock { 
+            font-size: 12px; 
+            font-weight: 600; 
+            color: var(--text-accent); 
+            background: rgba(0, 0, 0, 0.05); 
+            padding: 2px 8px; 
+            border-radius: 10px; 
+        }
         .dark-mode .live-clock { background: rgba(0, 0, 0, 0.3); color: var(--text-accent); }
 
-        .page-footer { width: 100%; text-align: center; padding: 0 15px 15px 15px; flex-shrink: 0; }
-        .footer-text { font-size: 10px; color: var(--footer-text-color); opacity: 0.8; transition: color 0.5s ease; }
+        .page-footer { 
+            width: 100%; 
+            text-align: center; 
+            padding: 0 15px 15px 15px; 
+            flex-shrink: 0; 
+        }
+        .footer-text { 
+            font-size: 10px; 
+            color: var(--footer-text-color); 
+            opacity: 0.8; 
+            transition: color 0.5s ease; 
+        }
 
-        .menu-button { position: absolute; top: 25px; right: 25px; padding: 10px; background: transparent; border: none; cursor: pointer; z-index: 4; }
-        .menu-button svg rect { fill: var(--menu-icon-fill); transition: fill 0.5s ease; }
+        .menu-button { 
+            position: absolute; 
+            top: 25px; 
+            right: 25px; 
+            padding: 10px; 
+            background: transparent; 
+            border: none; 
+            cursor: pointer; 
+            z-index: 4; 
+        }
+        .menu-button svg rect { 
+            fill: var(--menu-icon-fill); 
+            transition: fill 0.5s ease; 
+        }
 
         .menu {
             display: none;
@@ -399,29 +519,114 @@
         .menu.is-opening { animation: open-menu 0.3s ease-out forwards; }
         .menu.is-closing { animation: close-menu 0.3s ease-out forwards; }
 
-        .menu-item { padding: 15px 20px; cursor: pointer; color: var(--menu-text); font-weight: 500; transition: color 0.5s ease, background-color 0.3s ease; }
+        .menu-item { 
+            padding: 15px 20px; 
+            cursor: pointer; 
+            color: var(--menu-text); 
+            font-weight: 500; 
+            transition: color 0.5s ease, background-color: 0.3s ease; 
+        }
         .menu-item:hover { background-color: rgba(255, 255, 255, 0.1); }
         .dark-mode .menu-item:hover { background-color: rgba(255, 255, 255, 0.1); }
         body:not(.dark-mode) .menu-item:hover { background-color: rgba(0, 0, 0, 0.05); }
 
-        .quote-container { padding: 15px; border-top: var(--menu-border); }
-        .quote-container iframe { width: 100%; height: 200px; border: none; border-radius: 10px; }
-        .quote-container a { display: block; font-size: 12px; color: var(--menu-text); margin-top: 10px; font-weight: bold; }
+        .quote-container { 
+            padding: 15px; 
+            border-top: var(--menu-border); 
+        }
+        .quote-container iframe { 
+            width: 100%; 
+            height: 200px; 
+            border: none; 
+            border-radius: 10px; 
+        }
+        .quote-container a { 
+            display: block; 
+            font-size: 12px; 
+            color: var(--menu-text); 
+            margin-top: 10px; 
+            font-weight: bold; 
+        }
 
-        @keyframes open-menu { from { opacity: 0; transform: translateY(-15px) scale(0.20); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes close-menu { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-15px) scale(0.20); } }
+        @keyframes open-menu { 
+            from { opacity: 0; transform: translateY(-15px) scale(0.20); } 
+            to { opacity: 1; transform: translateY(0) scale(1); } 
+        }
+        @keyframes close-menu { 
+            from { opacity: 1; transform: translateY(0) scale(1); } 
+            to { opacity: 0; transform: translateY(-15px) scale(0.20); } 
+        }
 
-        #birthday-popup-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); z-index: 1000; justify-content: center; align-items: center; padding: 15px; animation: fade-in 0.4s ease; }
-        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        #birthday-popup-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0, 0, 0, 0.6); 
+            z-index: 1000; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 15px; 
+            animation: fade-in 0.4s ease; 
+        }
+        @keyframes fade-in { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
 
-        #birthday-popup-content { background: var(--popup-bg); color: var(--popup-text); padding: 30px 40px; border-radius: 15px; text-align: center; position: relative; box-shadow: var(--popup-shadow); max-width: 90%; width: 380px; transition: background 0.5s ease, color 0.5s ease; }
-        #birthday-popup-content p { margin-bottom: 15px; font-size: 16px; }
-        #birthday-popup-close { position: absolute; top: 10px; right: 15px; background: transparent; border: none; font-size: 28px; line-height: 1; color: var(--popup-text); cursor: pointer; opacity: 0.7; transition: opacity 0.2s, color 0.5s ease; }
+        #birthday-popup-content { 
+            background: var(--popup-bg); 
+            color: var(--popup-text); 
+            padding: 30px 40px; 
+            border-radius: 15px; 
+            text-align: center; 
+            position: relative; 
+            box-shadow: var(--popup-shadow); 
+            max-width: 90%; 
+            width: 380px; 
+            transition: background 0.5s ease, color 0.5s ease; 
+        }
+        #birthday-popup-content p { 
+            margin-bottom: 15px; 
+            font-size: 16px; 
+        }
+        #birthday-popup-close { 
+            position: absolute; 
+            top: 10px; 
+            right: 15px; 
+            background: transparent; 
+            border: none; 
+            font-size: 28px; 
+            line-height: 1; 
+            color: var(--popup-text); 
+            cursor: pointer; 
+            opacity: 0.7; 
+            transition: opacity 0.2s, color 0.5s ease; 
+        }
         #birthday-popup-close:hover { opacity: 1; }
-        .gift-link { display: inline-block; margin-top: 10px; padding: 10px 20px; background-color: var(--text-accent); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background-color 0.3s ease, transform 0.2s ease; }
+        .gift-link { 
+            display: inline-block; 
+            margin-top: 10px; 
+            padding: 10px 20px; 
+            background-color: var(--text-accent); 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            transition: background-color 0.3s ease, transform 0.2s ease; 
+        }
         .gift-link:hover { transform: scale(1.05); }
 
-        .bottom-icons-container { position: absolute; bottom: 15px; right: 15px; z-index: 5; display: flex; gap: 8px; }
+        .bottom-icons-container { 
+            position: absolute; 
+            bottom: 15px; 
+            right: 15px; 
+            z-index: 5; 
+            display: flex; 
+            gap: 8px; 
+        }
         .icon-wrapper { position: relative; }
 
         .info-icon {
@@ -455,7 +660,12 @@
         }
 
         #theme-toggle-icon { font-size: 13px; line-height: 1; }
-        #theme-toggle-icon .auto-text { font-size: 8px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+        #theme-toggle-icon .auto-text { 
+            font-size: 8px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
 
         #version-info-icon { font-family: serif; font-style: italic; }
 
@@ -478,7 +688,11 @@
         }
 
         .info-popup p { margin: 0 0 12px 0; }
-        .info-popup a { color: var(--text-accent); text-decoration: none; font-weight: 600; }
+        .info-popup a { 
+            color: var(--text-accent); 
+            text-decoration: none; 
+            font-weight: 600; 
+        }
         .info-popup a:hover { text-decoration: underline; }
 
         .popup-button {
@@ -533,7 +747,22 @@
                 <!-- =================== CARD FRONT =================== -->
                 <div class="card-front">
                     <div class="infinity-container">
-                        <svg viewBox="0 0 400 200"><path id="infinity-path" d="M100,100 C100,50 150,50 200,100 C250,150 300,150 300,100 C300,50 250,50 200,100 C150,150 100,150 100,100 Z" class="infinity-path" /></svg>
+                        <svg viewBox="0 0 400 200">
+                            <defs>
+                                <linearGradient id="rgb-gradient" gradientUnits="userSpaceOnUse">
+                                    <stop offset="0%" stop-color="#ff0000"/>
+                                    <stop offset="12.5%" stop-color="#ff7300"/>
+                                    <stop offset="25%" stop-color="#fffb00"/>
+                                    <stop offset="37.5%" stop-color="#48ff00"/>
+                                    <stop offset="50%" stop-color="#00ffd5"/>
+                                    <stop offset="62.5%" stop-color="#002bff"/>
+                                    <stop offset="75%" stop-color="#7a00ff"/>
+                                    <stop offset="87.5%" stop-color="#ff00c8"/>
+                                    <stop offset="100%" stop-color="#ff0000"/>
+                                </linearGradient>
+                            </defs>
+                            <path id="infinity-path" d="M100,100 C100,50 150,50 200,100 C250,150 300,150 300,100 C300,50 250,50 200,100 C150,150 100,150 100,100 Z" class="infinity-path" />
+                        </svg>
                     </div>
                     
                     <button class="menu-button" id="menuButton">
@@ -553,7 +782,7 @@
                             <path fill="#ffffff" d="M10.77 16.3l-3.33-3.33c-.4-.4-.4-1.03 0-1.43s1.03-.4 1.43 0l2.62 2.62 4.96-4.96c.4-.4 1.03-.4 1.43 0s.4 1.03 0 1.43l-5.67 5.67c-.2.2-.47.3-.72.3s-.52-.1-.72-.3z"></path>
                         </svg>
                     </h2>
-                    <p class="bio">"Life's struggles are endless, but so is our resilience — infinite in time, infinite in hope."</p>
+                    <p class="bio">"You cannot swim for new horizons until you have courage to lose sight of the shore." ~ William Faulkner</p>
             
                     <div class="social-icons">
                         <a href="https://www.facebook.com/norwell.me" target="_blank" class="social-icon" aria-label="Facebook Profile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="#3F51B5" d="M42,37c0,2.762-2.238,5-5,5H11c-2.761,0-5-2.238-5-5V11c0-2.762,2.239-5,5-5h26c2.762,0,5,2.238,5,5V37z"/><path fill="#FFFFFF" d="M34.368,25H31v13h-5V25h-3v-4h3v-2.41c0.002-3.508,1.459-5.59,5.592-5.59H35v4h-2.287C31.104,17,31,17.6,31,18.723V21h4L34.368,25z"/></svg></a>
@@ -609,8 +838,11 @@
                 <div class="card-back">
                     <div class="card-back-content">
                         <div id="flip-card-back-icon" class="info-icon flip-icon" aria-label="Flip Card">🔄</div>
-                        <h1><b>SCAN TO SHARE</b></h1>
-                        <img src="https://i.ibb.co/Ps5DShrd/Untitled.png" alt="QR Code" class="qr-code">
+                        <p class="scan-text">SCAN TO SHARE</p>
+                        <div class="qr-code">
+                            <img src="https://i.ibb.co/LBrxd89/dd905baa-17f1-4877-83bb-1e7937d76038-removalai-preview.png" alt="QR Code" style="width: 100%; height: 100%; border-radius: 25px;">
+                            <p class="version-text">Version 3</p>
+                        </div>
                         <div class="link-container">
                             <div id="page-link-box">https://norwell-official-profile-dev.github.io/PROFILE-CARD-Go-beyond-the-limit/Pdev.html</div>
                             <button id="copy-link-button" aria-label="Copy Page Link">
@@ -675,7 +907,7 @@
                 "type": "opt-in", // Explicit consent required
                 "content": {
                     "message": "This site collects your data and uses cookies for analytics to improve your experience. You can opt out at any time.",
-                    "allow": "Agree",
+                    "allow": " Agree",
                     "deny": "Decline",
                     "link": "Privacy Policy",
                     "href": "https://norwell-official-profile-dev.github.io/Data-Privacy-consent/privacy.html"
@@ -852,7 +1084,7 @@
             const length = path.getTotalLength();
             path.style.strokeDasharray = length;
             path.style.strokeDashoffset = length;
-            path.style.animation = 'draw 5s linear forwards';
+            path.style.animation = 'draw 5s linear forwards, rgb-metamorphosis 8s ease infinite';
 
             // --- MENU LOGIC ---
             const $menu = $('#menu');
