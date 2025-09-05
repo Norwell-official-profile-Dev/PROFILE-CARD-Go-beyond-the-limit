@@ -467,6 +467,7 @@
             background: rgba(0, 0, 0, 0.05); 
             padding: 2px 8px; 
             border-radius: 10px; 
+            z-index: 5; 
         }
         .dark-mode .live-clock { background: rgba(0, 0, 0, 0.3); color: var(--text-accent); }
 
@@ -557,7 +558,7 @@
             to { opacity: 0; transform: translateY(-15px) scale(0.20); } 
         }
 
-        #birthday-popup-overlay { 
+        #birthday-popup-overlay, #blog-popup-overlay { 
             display: none; 
             position: fixed; 
             top: 0; 
@@ -571,12 +572,13 @@
             padding: 15px; 
             animation: fade-in 0.4s ease; 
         }
+
         @keyframes fade-in { 
             from { opacity: 0; } 
             to { opacity: 1; } 
         }
 
-        #birthday-popup-content { 
+        #birthday-popup-content, #blog-popup-content { 
             background: var(--popup-bg); 
             color: var(--popup-text); 
             padding: 30px 40px; 
@@ -587,12 +589,30 @@
             max-width: 90%; 
             width: 380px; 
             transition: background 0.5s ease, color 0.5s ease; 
+            animation: slide-in 0.4s ease-out; 
         }
-        #birthday-popup-content p { 
+
+        @keyframes slide-in {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        #birthday-popup-content p, #blog-popup-content p { 
             margin-bottom: 15px; 
             font-size: 16px; 
+            font-family: 'Poppins', sans-serif;
         }
-        #birthday-popup-close { 
+
+        #blog-popup-content p {
+            background: linear-gradient(135deg, #33bacc, #ff00f3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        #birthday-popup-close, #blog-popup-close { 
             position: absolute; 
             top: 10px; 
             right: 15px; 
@@ -605,7 +625,8 @@
             opacity: 0.7; 
             transition: opacity 0.2s, color 0.5s ease; 
         }
-        #birthday-popup-close:hover { opacity: 1; }
+        #birthday-popup-close:hover, #blog-popup-close:hover { opacity: 1; }
+
         .gift-link { 
             display: inline-block; 
             margin-top: 10px; 
@@ -623,11 +644,11 @@
             position: absolute; 
             bottom: 15px; 
             right: 15px; 
-            z-index: 5; 
+            z-index: 10; 
             display: flex; 
             gap: 8px; 
         }
-        .icon-wrapper { position: relative; }
+        .icon-wrapper { position: relative; z-index: 11; }
 
         .info-icon {
             width: 20px;
@@ -685,6 +706,7 @@
             text-align: left;
             transform-origin: bottom right;
             transition: background 0.5s ease, color 0.5s ease;
+            z-index: 12;
         }
 
         .info-popup p { margin: 0 0 12px 0; }
@@ -711,7 +733,7 @@
 
         #ip-logger { display: none; }
 
-        /* Custom CSS for consent popup: smaller size, rounded edges, centered bottom */
+        /* Custom CSS for consent popup */
         .cc-window {
             border-radius: 15px !important;
             width: 280px !important;
@@ -772,7 +794,7 @@
                     <div class="profile-header">
                         <img src="https://i.ibb.co/JjjSZz3g/92ecd75b-96e4-4f7d-a3f0-74e941024352.gif" alt="Cover Photo" class="cover-photo" id="cover-photo" oncontextmenu="return false;">
                         <div class="profile-picture">
-                            <img src="https://i.ibb.co/mCRxcv3z/1743636225298.jpg" alt="profile not available" oncontextmenu="return false;">
+                            <img src="https://i.ibb.co/XxPHFLFT/IMG-20250905-191927.jpg<!--  -->" alt="profile not available" oncontextmenu="return false;">
                         </div>
                     </div>
 
@@ -811,7 +833,6 @@
                         <div class="icon-wrapper">
                             <div id="flip-card-front-icon" class="info-icon flip-icon" aria-label="Flip Card">🔄</div>
                         </div>
-
                         <div class="icon-wrapper">
                             <div id="shoutout-icon" class="info-icon">📣</div>
                             <div id="shoutout-popup" class="info-popup">
@@ -819,11 +840,9 @@
                                 <a href="https://tally.so/r/3lkBB6" target="_blank" class="popup-button">Shout it out!</a>
                             </div>
                         </div>
-                        
                         <div class="icon-wrapper">
                             <div id="theme-toggle-icon" class="info-icon" aria-label="Toggle Theme"></div>
                         </div>
-
                         <div class="icon-wrapper">
                             <div id="version-info-icon" class="info-icon">i</div>
                             <div id="version-popup" class="info-popup">
@@ -841,7 +860,7 @@
                         <p class="scan-text">SCAN TO SHARE</p>
                         <div class="qr-code">
                             <img src="https://i.ibb.co/LBrxd89/dd905baa-17f1-4877-83bb-1e7937d76038-removalai-preview.png" alt="QR Code" style="width: 100%; height: 100%; border-radius: 25px;">
-                            <p class="version-text">Version 3</p>
+                            <p class="version-text">Last updated: September 5, 2025</p>
                         </div>
                         <div class="link-container">
                             <div id="page-link-box">https://norwell-official-profile-dev.github.io/PROFILE-CARD-Go-beyond-the-limit/Pdev.html</div>
@@ -860,8 +879,9 @@
     </footer>
 
     <div class="menu" id="menu">
-        <a href="https://norwell-io.github.io/Projects/projectsJUNE162025" style="text-decoration: none; color: inherit;"><div class="menu-item">Go to projects</div></a>
+        <a href="https://norwell-official-profile-dev.github.io/Projectsv2/ProjectsSept5.html" style="text-decoration: none; color: inherit;"><div class="menu-item">Go to projects</div></a>
         <a href="https://norwell-official-profile-dev.github.io/CatchRush/gamev2.html" style="text-decoration: none; color: inherit;"><div class="menu-item">Play Game</div></a>
+        <div class="menu-item" id="blog-menu">Blog/Updates</div>
         <div class="quote-container">
             <iframe id="quote-iframe" src=""></iframe>
             <a href="https://kwize.com/quote-of-the-day/">Quote of the day ✨❤️</a>
@@ -873,7 +893,14 @@
             <button id="birthday-popup-close">×</button>
             <p>This owner of this page is currently celebrating their birthday!</p>
             <p>Do you want to send them a gift?</p>
-            <a href="https://pastebin.com/MLUdbx3z" target="_blank" class="gift-link">🎁 Send a Gift</a>
+            <a href="https://pastebin.com/9xwUE652" target="_blank" class="gift-link">🎁 Send a Gift</a>
+        </div>
+    </div>
+
+    <div id="blog-popup-overlay">
+        <div id="blog-popup-content">
+            <button id="blog-popup-close">×</button>
+            <p>Feature is not yet available</p>
         </div>
     </div>
     
@@ -882,14 +909,13 @@
 
     <script>
         $(document).ready(function() {
-            // --- CHECK IF CONSENT NEEDS TO BE RE-PROMPTED (every 24 hours for granted) ---
+            // --- CHECK IF CONSENT NEEDS TO BE RE-PROMPTED ---
             const consentKey = 'analytics_consent';
             const timeKey = 'last_consent_time';
-            const consentInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+            const consentInterval = 24 * 60 * 60 * 1000; // 24 hours
             const currentTime = Date.now();
             const lastTime = parseInt(localStorage.getItem(timeKey)) || 0;
 
-            // Reset consent if more than 24 hours has passed for granted consent
             if (localStorage.getItem(consentKey) === 'granted' && (currentTime - lastTime) > consentInterval) {
                 localStorage.removeItem(consentKey);
                 localStorage.removeItem(timeKey);
@@ -903,8 +929,8 @@
                     "popup": { "background": "var(--popup-bg)", "text": "var(--popup-text)" },
                     "button": { "background": "var(--text-accent)" }
                 },
-                "position": "bottom", // Centered bottom
-                "type": "opt-in", // Explicit consent required
+                "position": "bottom",
+                "type": "opt-in",
                 "content": {
                     "message": "This site collects your data and uses cookies for analytics to improve your experience. You can opt out at any time.",
                     "allow": " Agree",
@@ -919,7 +945,6 @@
                         enableIPLogging();
                         hideConsentPopup();
                     } else if (status === 'deny') {
-                        // For decline, do not store consent, so popup shows on next load
                         localStorage.removeItem(consentKey);
                         localStorage.removeItem(timeKey);
                         $('#ip-logger').attr('src', '');
@@ -933,7 +958,6 @@
                         enableIPLogging();
                         hideConsentPopup();
                     } else if (status === 'deny') {
-                        // For decline, do not store consent
                         localStorage.removeItem(consentKey);
                         localStorage.removeItem(timeKey);
                         $('#ip-logger').attr('src', '');
@@ -949,25 +973,21 @@
                 }
             });
 
-            // --- FUNCTION TO HIDE CONSENT POPUP ---
             function hideConsentPopup() {
                 $('.cc-window').fadeOut(300, function() {
-                    $(this).remove(); // Remove from DOM to prevent reappearance
+                    $(this).remove();
                 });
             }
 
-            // --- IP LOGGING FUNCTION ---
             function enableIPLogging() {
                 if (localStorage.getItem(consentKey) !== 'granted') return;
                 $('#ip-logger').attr('src', 'https://urlto.me/21YM2');
             }
 
-            // Check consent on page load
             if (localStorage.getItem(consentKey) === 'granted' && (currentTime - lastTime) <= consentInterval) {
                 enableIPLogging();
                 hideConsentPopup();
             } else {
-                // Show popup if no valid consent
                 localStorage.removeItem(consentKey);
                 localStorage.removeItem(timeKey);
                 document.cookie = "cookieconsent_status=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -1119,6 +1139,19 @@
                 }
             });
 
+            // --- Blog Modal Logic ---
+            $('#blog-menu').on('click', function(e) {
+                e.stopPropagation();
+                $('#blog-popup-overlay').css('display', 'flex');
+                closeMenu();
+            });
+
+            $('#blog-popup-close, #blog-popup-overlay').on('click', function(e) {
+                if (e.target === this || e.target.id === 'blog-popup-close') {
+                    $('#blog-popup-overlay').fadeOut(300);
+                }
+            });
+
             // --- POPUPS AND OTHER EVENT HANDLERS ---
             const today = new Date();
             if (today.getMonth() === 3 && today.getDate() === 20) {
@@ -1135,12 +1168,16 @@
                 $('.info-popup').not(currentPopup).fadeOut(150);
                 currentPopup.fadeToggle(150);
             });
-            
+
+            $('.info-popup').on('click', function(e) {
+                e.stopPropagation(); // Prevent clicks inside popup from closing it
+            });
+
             $(document).on('click', function(e) {
                 if ($menu.hasClass('is-visible') && !$(e.target).closest('#menu, #menuButton').length) {
                     closeMenu();
                 }
-                if ($('.info-popup:visible').length > 0 && !$(e.target).closest('.icon-wrapper').length) {
+                if ($('.info-popup:visible').length > 0 && !$(e.target).closest('.icon-wrapper, .info-popup').length) {
                     $('.info-popup').fadeOut(150);
                 }
             });
